@@ -216,6 +216,7 @@ Copy this checklist and check off items as you complete them:
 - [ ] Step 5: Generate prompts from IR
 - [ ] Step 6: Review prompts (conditional)
 - [ ] Step 7: Render per output_formats (png images / html / editable pptx)
+- [ ] Step 7.5: Per-slide reroll (png branch only, conditional)
 - [ ] Step 8: Merge / package per format
 - [ ] Step 9: Output summary
 ```
@@ -317,6 +318,8 @@ Read `meta.output_formats` from `slides.json` and dispatch one branch per format
 
 `--regenerate N` jumps to this branch for the named slides only. `--images-only` starts here with existing prompts.
 
+After all PNGs finish, run **Step 7.5** (below) to let the user reroll any unsatisfactory slides without restarting the workflow.
+
 **7b · `html`**
 
 When `html` is in `meta.output_formats`:
@@ -340,6 +343,16 @@ ${BUN_X} {baseDir}/scripts/render-pptx-editable.ts <slide-deck-dir>
 The renderer reads `slides.json` and emits `{topic-slug}-editable.pptx` with **real editable content**: each slide has true text boxes, shapes, and (for `data` type) native PowerPoint charts — no rasterised images. The theme (fonts, colors, type sizes) comes from `references/pptx-themes/<preset>.json` falling back to `_default.json`.
 
 Fonts are not embedded; the theme declares system-universal families (`Calibri`, `Cambria`, `Helvetica Neue`, `Microsoft YaHei` / `PingFang SC` for zh) so the deck opens cleanly in PowerPoint / Keynote / Google Slides. If a slide has `background_image` set, the renderer overlays text boxes on top of it (hybrid mode — AI background + editable foreground). If `render_override: "image"` is set, the slide becomes a full-bleed image.
+
+### Step 7.5: Per-Slide Reroll (PNG branch only)
+
+After **7a** finishes, before moving to Step 8, ask the user which (if any) slides to regenerate. Use the multi-select question template in `references/confirmation.md` § Post-Render Reroll. Behavior:
+
+- If the user selects nothing → proceed to Step 8.
+- If the user selects one or more slides → re-run 7a for just those slide numbers (same logic as `--regenerate N1,N2,...`), then ask again. Loop until the user clears all selections.
+- Skip this step entirely when `png` is not in `meta.output_formats` — HTML and editable-PPTX renderers are deterministic, so re-running them after editing `slides.json` produces the same output cheaply without a reroll loop.
+
+The loop guards the most expensive part of the workflow (AI image generation) from "regenerate command discovery" — the user doesn't need to learn `--regenerate N`, they just keep clicking until satisfied.
 
 ### Step 8: Merge / Package per Format
 

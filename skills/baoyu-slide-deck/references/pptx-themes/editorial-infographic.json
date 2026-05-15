@@ -1,0 +1,32 @@
+{
+  "fonts": {
+    "heading": "Helvetica Neue",
+    "body": "Calibri",
+    "mono": "Consolas",
+    "headingZh": "Microsoft YaHei",
+    "bodyZh": "Microsoft YaHei"
+  },
+  "colors": {
+    "bg": "FFFFFF",
+    "textPrimary": "1A1A1A",
+    "textHeading": "1A1A1A",
+    "textSecondary": "4A5568",
+    "accent": "2563EB",
+    "accentOn": "FFFFFF",
+    "border": "D1D5DB"
+  },
+  "sizes": {
+    "titleCover": 60,
+    "titleContent": 40,
+    "titleKeyStat": 130,
+    "subtitle": 22,
+    "body": 20,
+    "quote": 34,
+    "code": 14,
+    "bulletGap": 10
+  },
+  "options": {
+    "titleBold": true,
+    "bulletShape": "dot"
+  }
+}

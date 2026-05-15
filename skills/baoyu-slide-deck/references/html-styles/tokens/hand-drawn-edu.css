@@ -1,0 +1,18 @@
+:root {
+  --font-heading: "Marker Felt", "Comic Sans MS", "Bradley Hand", cursive;
+  --font-body: -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+  --heading-weight: 700;
+  --heading-tracking: 0;
+  --bullet-radius: 50%;
+  --bg-page: #F5F0E8;
+  --bg-slide: #F5F0E8;
+  --bg-code: rgba(45, 45, 45, 0.06);
+  --text-primary: #2D2D2D;
+  --text-heading: #2D2D2D;
+  --text-secondary: #6B6B6B;
+  --accent-primary: #E8655A;
+  --accent-on-primary: #F5F0E8;
+  --border-color: rgba(45, 45, 45, 0.15);
+  --chrome-bg: rgba(245, 240, 232, 0.95);
+}

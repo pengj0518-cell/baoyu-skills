@@ -1,0 +1,21 @@
+:root {
+  --font-heading: "Courier New", "Lucida Console", monospace;
+  --font-body: "Courier New", "Lucida Console", monospace;
+  --font-mono: "Courier New", "Lucida Console", monospace;
+  --heading-weight: 700;
+  --heading-tracking: 0;
+  --bullet-radius: 0;
+  --bg-page: #87CEEB;
+  --bg-slide: #87CEEB;
+  --bg-code: rgba(26, 26, 46, 0.12);
+  --text-primary: #1A1A2E;
+  --text-heading: #1A1A2E;
+  --text-secondary: #4A4A6E;
+  --accent-primary: #FF00FF;
+  --accent-on-primary: #1A1A2E;
+  --border-color: rgba(26, 26, 46, 0.25);
+  --chrome-bg: rgba(135, 206, 235, 0.95);
+}
+
+.slide-title, .slide-subtitle, .slide-bullets { image-rendering: pixelated; -webkit-font-smoothing: none; }
+.slide-bullets li::before { width: 0.6rem; height: 0.6rem; border-radius: 0; }

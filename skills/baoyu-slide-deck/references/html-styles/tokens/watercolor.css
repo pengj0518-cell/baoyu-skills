@@ -1,0 +1,20 @@
+:root {
+  --font-heading: "Iowan Old Style", "Charter", "Georgia", serif;
+  --font-body: "Iowan Old Style", "Charter", "Georgia", serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+  --heading-weight: 500;
+  --heading-tracking: 0;
+  --bg-page: #FAF8F0;
+  --bg-slide: #FAF8F0;
+  --bg-code: rgba(61, 61, 61, 0.05);
+  --text-primary: #3D3D3D;
+  --text-heading: #3D3D3D;
+  --text-secondary: #6B6B6B;
+  --accent-primary: #F4A261;
+  --accent-on-primary: #FAF8F0;
+  --border-color: rgba(61, 61, 61, 0.12);
+  --chrome-bg: rgba(250, 248, 240, 0.95);
+}
+
+.slide-title { font-style: italic; }
+.slide-bullets li::before { background: linear-gradient(135deg, #F4A261, #E8A0A0); }

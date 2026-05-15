@@ -1,0 +1,19 @@
+:root {
+  --font-heading: "Comic Sans MS", "Marker Felt", "Bradley Hand", cursive;
+  --font-body: "Comic Sans MS", "Marker Felt", -apple-system, sans-serif;
+  --font-mono: "Courier New", monospace;
+  --heading-weight: 700;
+  --heading-tracking: 0;
+  --bg-page: #1A1A1A;
+  --bg-slide: #1A1A1A;
+  --bg-code: rgba(245, 245, 245, 0.08);
+  --text-primary: #F5F5F5;
+  --text-heading: #FFE566;
+  --text-secondary: #C0C0C0;
+  --accent-primary: #FF9999;
+  --accent-on-primary: #1A1A1A;
+  --border-color: rgba(245, 245, 245, 0.15);
+  --chrome-bg: rgba(26, 26, 26, 0.9);
+}
+
+.slide-title { text-shadow: 0 0 1px rgba(255, 229, 102, 0.3); }

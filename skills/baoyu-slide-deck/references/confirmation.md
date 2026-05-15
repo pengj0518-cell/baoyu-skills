@@ -209,6 +209,32 @@ options:
     description: Create new prompts with different approach
 ```
 
+## Post-Render Reroll (Step 7.5)
+
+After Step 7's PNG generation finishes, list the generated slides and ask which (if any) the user wants to regenerate. Multi-select so the user can flag several at once.
+
+```yaml
+header: Reroll
+question: Any slides to regenerate? (multi-select; leave all unchecked to accept)
+multiSelect: true
+options:
+  - label: "1. {slide_1_title}"
+    description: "{slide_1_filename}"
+  - label: "2. {slide_2_title}"
+    description: "{slide_2_filename}"
+  # one option per generated slide
+```
+
+Substitute `{slide_N_title}` with the slide's title from `slides.json` and `{slide_N_filename}` with its PNG filename. Cap the option list at 30 entries (matches max slide count).
+
+Behavior:
+
+- **No selection** → proceed to Step 8 (merge).
+- **One or more selected** → re-invoke Step 7a only for those slide numbers (equivalent to `--regenerate N1,N2,...`). When that batch finishes, ask this question again until the user clears all selections.
+- This loop only applies to the `png` branch. HTML and editable-PPTX are deterministic — re-running them is cheap, so the user can just re-issue the command if they want a different output after editing `slides.json`.
+
+Skip this step entirely when `output_formats` does not include `png`.
+
 ## Existing Content (Step 1.3)
 
 ```yaml

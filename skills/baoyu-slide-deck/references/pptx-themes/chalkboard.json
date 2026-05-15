@@ -1,0 +1,32 @@
+{
+  "fonts": {
+    "heading": "Comic Sans MS",
+    "body": "Comic Sans MS",
+    "mono": "Courier New",
+    "headingZh": "Microsoft YaHei",
+    "bodyZh": "Microsoft YaHei"
+  },
+  "colors": {
+    "bg": "1A1A1A",
+    "textPrimary": "F5F5F5",
+    "textHeading": "FFE566",
+    "textSecondary": "C0C0C0",
+    "accent": "FF9999",
+    "accentOn": "1A1A1A",
+    "border": "3A3A3A"
+  },
+  "sizes": {
+    "titleCover": 52,
+    "titleContent": 34,
+    "titleKeyStat": 120,
+    "subtitle": 22,
+    "body": 20,
+    "quote": 32,
+    "code": 14,
+    "bulletGap": 10
+  },
+  "options": {
+    "titleBold": false,
+    "bulletShape": "dot"
+  }
+}

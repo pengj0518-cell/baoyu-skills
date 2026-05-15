@@ -1,0 +1,17 @@
+:root {
+  --font-heading: "Helvetica Neue", "Inter", -apple-system, sans-serif;
+  --font-body: "Charter", "Iowan Old Style", "Georgia", serif;
+  --font-mono: ui-monospace, "JetBrains Mono", Menlo, monospace;
+  --heading-weight: 700;
+  --heading-tracking: -0.01em;
+  --bg-page: #F5F0E6;
+  --bg-slide: #F5F0E6;
+  --bg-code: rgba(45, 45, 45, 0.06);
+  --text-primary: #1A1A1A;
+  --text-heading: #5D3A3A;
+  --text-secondary: #8B7355;
+  --accent-primary: #2F7373;
+  --accent-on-primary: #F5F0E6;
+  --border-color: rgba(45, 45, 45, 0.15);
+  --chrome-bg: rgba(245, 240, 230, 0.95);
+}

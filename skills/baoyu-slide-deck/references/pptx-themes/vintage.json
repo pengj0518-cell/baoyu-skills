@@ -1,0 +1,32 @@
+{
+  "fonts": {
+    "heading": "Georgia",
+    "body": "Georgia",
+    "mono": "Courier New",
+    "headingZh": "Microsoft YaHei",
+    "bodyZh": "Microsoft YaHei"
+  },
+  "colors": {
+    "bg": "F5E6D3",
+    "textPrimary": "3D2914",
+    "textHeading": "3D2914",
+    "textSecondary": "6B4423",
+    "accent": "722F37",
+    "accentOn": "F5E6D3",
+    "border": "D8C8AA"
+  },
+  "sizes": {
+    "titleCover": 50,
+    "titleContent": 32,
+    "titleKeyStat": 110,
+    "subtitle": 20,
+    "body": 18,
+    "quote": 30,
+    "code": 14,
+    "bulletGap": 8
+  },
+  "options": {
+    "titleBold": true,
+    "bulletShape": "dot"
+  }
+}

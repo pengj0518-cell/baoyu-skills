@@ -1,0 +1,20 @@
+:root {
+  --font-heading: "Helvetica Neue", "Inter", -apple-system, sans-serif;
+  --font-body: -apple-system, "Inter", "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", Menlo, monospace;
+  --heading-weight: 800;
+  --heading-tracking: -0.03em;
+  --bg-page: #FFFFFF;
+  --bg-slide: #FFFFFF;
+  --bg-code: rgba(26, 26, 26, 0.05);
+  --text-primary: #1A1A1A;
+  --text-heading: #1A1A1A;
+  --text-secondary: #4A5568;
+  --accent-primary: #2563EB;
+  --accent-on-primary: #FFFFFF;
+  --border-color: #D1D5DB;
+  --chrome-bg: rgba(255, 255, 255, 0.95);
+}
+
+.slide-title { line-height: 0.95; }
+.slide-bullets li::before { background: #F97316; width: 0.6rem; height: 0.6rem; }
