@@ -176,8 +176,9 @@ function parseKeyContent(block: string | undefined): {
   if (bodyIdx >= 0) {
     const body = block.slice(bodyIdx).split("\n").slice(1);
     bullets = body
+      .filter((l) => /^\s*[-*]\s+/.test(l))
       .map((l) => l.replace(/^\s*[-*]\s+/, "").trim())
-      .filter((l) => l.length > 0 && !/^[A-Z][a-z-]+:/.test(l));
+      .filter((l) => l.length > 0);
   }
   return {
     title: titleMatch ? titleMatch[1]!.trim() : "",

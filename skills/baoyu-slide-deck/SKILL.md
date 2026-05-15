@@ -64,6 +64,7 @@ Respond in the user's language across questions, progress reports, error message
 |--------|---------|
 | `scripts/outline-to-ir.ts` | Parse `outline.md` → `slides.json` (Slide IR) |
 | `scripts/ir-to-prompts.ts` | Render `slides.json` → `prompts/NN-slide-{slug}.md` |
+| `scripts/render-html.ts` | Render `slides.json` → single-file `{topic-slug}.html` (`html` format) |
 | `scripts/merge-to-pptx.ts` | Merge image slides into PowerPoint (`png` format) |
 | `scripts/merge-to-pdf.ts` | Merge image slides into PDF (`png` format) |
 
@@ -75,7 +76,7 @@ Respond in the user's language across questions, progress reports, error message
 | `--audience <type>` | beginners / intermediate / experts / executives / general |
 | `--lang <code>` | Output language (en, zh, ja, ...) |
 | `--slides <N>` | Target slide count (8-25 recommended, max 30) |
-| `--format <fmt>` | Output format; repeatable. `png` (default), `html` (Phase 3), `pptx-editable` (Phase 4) |
+| `--format <fmt>` | Output format; repeatable. `png` (default), `html`, `pptx-editable` (Phase 4) |
 | `--ref <files...>` | Reference images applied per slide (style / palette / composition / subject) |
 | `--outline-only` | Stop after outline |
 | `--prompts-only` | Stop after prompts (skip image generation) |
@@ -192,10 +193,10 @@ slide-deck/{topic-slug}/
 ├── NN-slide-{slug}.png          # png format only
 ├── {topic-slug}.pptx            # png format only (image-packed)
 ├── {topic-slug}.pdf             # png format only
-└── {topic-slug}.html            # html format only (Phase 3)
+└── {topic-slug}.html            # html format only
 ```
 
-`slides.json` is generated automatically from `outline.md` at the end of Step 3 and re-read by every renderer. The HTML and editable-PPTX renderers ship in Phase 3 and Phase 4 respectively.
+`slides.json` is generated automatically from `outline.md` at the end of Step 3 and re-read by every renderer. The editable-PPTX renderer ships in Phase 4.
 
 **Slug**: 2-4 words, kebab-case, extracted from topic. "Introduction to Machine Learning" → `intro-machine-learning`.
 
@@ -312,9 +313,17 @@ Read `meta.output_formats` from `slides.json` and dispatch one branch per format
 
 `--regenerate N` jumps to this branch for the named slides only. `--images-only` starts here with existing prompts.
 
-**7b · `html` (Phase 3 — not yet implemented)**
+**7b · `html`**
 
-When `html` is in `meta.output_formats`, invoke `scripts/render-html.ts` (ships in Phase 3). Until then, print a notice: `🚧 html renderer ships in Phase 3 — skipping`. Other formats still run.
+When `html` is in `meta.output_formats`:
+
+```bash
+${BUN_X} {baseDir}/scripts/render-html.ts <slide-deck-dir>
+```
+
+The renderer reads `slides.json`, inlines `references/html-styles/base.css` + `tokens/<preset>.css` (falling back to `tokens/_default.css`), and writes a single self-contained `{topic-slug}.html` with no external network requests. Keyboard nav (← / → / space / Home / End / `t` toggles ToC) and a hash-based deep link to slide N (`#5`) are built in.
+
+If a slide has `background_image` set in `slides.json`, the renderer inlines that file as a base64 data URI. To embed an AI-generated PNG as the slide background, set `background_image: "NN-slide-{slug}.png"` in the slide's IR entry before running this step. For per-slide `render_override: "image"`, the PNG is used full-bleed instead of CSS rendering.
 
 **7c · `pptx-editable` (Phase 4 — not yet implemented)**
 
@@ -331,7 +340,7 @@ ${BUN_X} {baseDir}/scripts/merge-to-pptx.ts <slide-deck-dir>
 ${BUN_X} {baseDir}/scripts/merge-to-pdf.ts <slide-deck-dir>
 ```
 
-**`html` →** `scripts/render-html.ts` writes the single-file `.html` directly; no merge step.
+**`html` →** `scripts/render-html.ts` writes the single-file `.html` directly; no merge step. To export PDF from HTML with sharper text than image-based PDF, open the file in Chrome and "Print → Save as PDF" — the print stylesheet built into `base.css` lays each `<section>` on its own page.
 
 **`pptx-editable` →** `scripts/render-pptx-editable.ts` writes the `.pptx` directly; no merge step.
 
@@ -398,6 +407,9 @@ See `references/modification-guide.md` for full details.
 | `references/modification-guide.md` | Edit/add/delete workflows |
 | `references/styles/<preset>.md` | Per-preset specifications (incl. `Compatible Outputs` matrix) |
 | `references/dimensions/*.md` | Per-dimension specifications |
+| `references/html-styles/base.css` | Universal HTML layout, nav, keyboard, ToC |
+| `references/html-styles/tokens/<preset>.css` | Per-preset HTML CSS variables (font / colour / spacing) |
+| `references/html-styles/tokens/_default.css` | Fallback when no per-preset CSS exists |
 | `references/config/preferences-schema.md` | EXTEND.md schema |
 
 ## Notes

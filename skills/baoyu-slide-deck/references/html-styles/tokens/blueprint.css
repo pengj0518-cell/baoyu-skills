@@ -1,0 +1,39 @@
+:root {
+  --font-heading: "Helvetica Neue", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Charter", "Georgia", "Iowan Old Style", serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --heading-weight: 700;
+  --heading-tracking: -0.015em;
+  --bullet-radius: 0;
+  --bg-page: #faf8f5;
+  --bg-slide: #faf8f5;
+  --bg-code: rgba(37, 99, 235, 0.06);
+  --text-primary: #334155;
+  --text-heading: #1e3a5f;
+  --text-secondary: #64748b;
+  --accent-primary: #2563eb;
+  --accent-on-primary: #faf8f5;
+  --border-color: rgba(51, 65, 85, 0.15);
+  --chrome-bg: rgba(250, 248, 245, 0.92);
+}
+
+main {
+  background-image:
+    linear-gradient(to right, rgba(37, 99, 235, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 99, 235, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.slide {
+  background: transparent;
+}
+
+.slide-title {
+  text-transform: none;
+}
+
+.slide-bullets li::before {
+  width: 0.6rem;
+  height: 2px;
+  top: 0.85em;
+}

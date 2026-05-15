@@ -1,0 +1,30 @@
+:root {
+  --font-heading: "Cambria", "Georgia", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --heading-weight: 700;
+  --heading-tracking: -0.02em;
+  --bg-page: #0a0a12;
+  --bg-slide: #0a0a12;
+  --bg-code: rgba(255, 255, 255, 0.05);
+  --bg-overlay: linear-gradient(to bottom, rgba(10, 10, 18, 0) 0%, rgba(10, 10, 18, 0.6) 100%);
+  --text-primary: #d4d4d8;
+  --text-heading: #fafafa;
+  --text-secondary: #a1a1aa;
+  --accent-primary: #f59e0b;
+  --accent-on-primary: #0a0a12;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --chrome-bg: rgba(20, 20, 30, 0.85);
+}
+
+.slide-title {
+  text-shadow: 0 0 40px rgba(245, 158, 11, 0.2);
+}
+
+.deck-chrome button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.deck-toc button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}

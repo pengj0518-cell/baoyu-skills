@@ -1,0 +1,19 @@
+:root {
+  --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --heading-weight: 700;
+  --heading-tracking: -0.02em;
+  --bullet-radius: 50%;
+  --bg-page: #f8f8f7;
+  --bg-slide: #ffffff;
+  --bg-code: rgba(0, 0, 0, 0.05);
+  --bg-overlay: rgba(0, 0, 0, 0);
+  --text-primary: #1f1f1f;
+  --text-heading: #0a0a0a;
+  --text-secondary: #5e5e5e;
+  --accent-primary: #2563eb;
+  --accent-on-primary: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --chrome-bg: rgba(255, 255, 255, 0.9);
+}

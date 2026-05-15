@@ -1,0 +1,30 @@
+:root {
+  --font-heading: "Helvetica Neue", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Charter", "Georgia", "Iowan Old Style", serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --heading-weight: 600;
+  --heading-tracking: -0.01em;
+  --bullet-radius: 50%;
+  --bg-page: #fafbfc;
+  --bg-slide: #ffffff;
+  --bg-code: rgba(0, 60, 100, 0.04);
+  --text-primary: #2d3748;
+  --text-heading: #1a202c;
+  --text-secondary: #718096;
+  --accent-primary: #2c7a7b;
+  --accent-on-primary: #ffffff;
+  --border-color: rgba(45, 55, 72, 0.12);
+  --chrome-bg: rgba(255, 255, 255, 0.95);
+}
+
+.slide-bullets li::before {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.slide-data-table th {
+  background: rgba(44, 122, 123, 0.06);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
