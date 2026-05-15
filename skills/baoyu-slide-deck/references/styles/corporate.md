@@ -2,6 +2,14 @@
 
 Professional business style with navy/gold palette and structured layouts
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | excellent |
+| pptx-editable | excellent |
+
 ## Design Aesthetic
 
 Clean lines, structured layouts, and business-appropriate sophistication. Projects competence, reliability, and institutional credibility. Balances professionalism with approachability through careful use of whitespace and refined color choices.

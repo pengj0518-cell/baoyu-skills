@@ -2,6 +2,14 @@
 
 Technical briefing infographic style with aged paper texture and bilingual explanatory text boxes
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | good |
+
 ## Design Aesthetic
 
 Academic/technical briefing presentation style, NOT artistic 3D renders. Clean 2D or isometric technical illustrations with multiple explanatory text boxes containing article content. Split layouts with visuals on left/center and text on right/bottom. Information-dense but organized with clear visual hierarchy. Vintage blueprint aesthetic with modern clarity.

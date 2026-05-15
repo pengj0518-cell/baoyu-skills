@@ -2,6 +2,14 @@
 
 Soft hand-drawn illustration style with fresh, refined minimalist editorial aesthetic
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | degraded |
+
 ## Design Aesthetic
 
 Illustration or hand-drawn feel with soft, relaxed brush strokes. Fresh, refined overall style with minimalist editorial approach. Emphasis on precision, clarity and intelligent elegance while prioritizing warmth, approachability and friendliness.

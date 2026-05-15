@@ -2,6 +2,14 @@
 
 Flat vector illustration style with clear black outlines and retro soft color palette
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | good |
+
 ## Design Aesthetic
 
 Flat vector illustration with no gradients or 3D effects. Clear, uniform-thickness black outlines on all elements. Geometric simplification reducing complex objects to basic shapes. Toy model aesthetic that's cute, playful, and approachable. Panoramic horizontal compositions work well.

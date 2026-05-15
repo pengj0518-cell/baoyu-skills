@@ -2,6 +2,14 @@
 
 Precise technical blueprint style with professional analytical visual presentation
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | good |
+
 ## Design Aesthetic
 
 Clean, structured visual metaphors using blueprints, diagrams, and schematics. Precise, analytical and aesthetically refined. Information presented in triptych or grid-based layouts with engineering precision.

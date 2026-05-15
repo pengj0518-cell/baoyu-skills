@@ -2,6 +2,14 @@
 
 Black chalkboard background with colorful chalk drawing style
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | degraded |
+
 ## Design Aesthetic
 
 Classic classroom chalkboard aesthetic with hand-drawn chalk illustrations. Nostalgic educational feel with imperfect, sketchy lines that capture the warmth of traditional teaching. Colorful chalk creates visual hierarchy while maintaining the authentic chalkboard experience.

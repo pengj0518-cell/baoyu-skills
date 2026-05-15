@@ -2,6 +2,14 @@
 
 Soft watercolor illustration style with hand-painted textures and natural warmth
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | degraded |
+| pptx-editable | degraded |
+
 ## Design Aesthetic
 
 Gentle watercolor aesthetic with visible brush strokes and natural color bleeding. Hand-painted feel with soft edges and organic shapes. Warm, approachable, and artistically refined. Combines artistic expression with clear information delivery.

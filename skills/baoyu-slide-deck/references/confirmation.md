@@ -4,7 +4,7 @@ Concrete option copy for the confirmation steps. SKILL.md lists which questions 
 
 ## Round 1 (Always)
 
-Batch all five questions in a single `AskUserQuestion` call.
+Batch all six questions in a single `AskUserQuestion` call. Q6 is conditionally hidden when the chosen preset only supports `png` (see Q6 below).
 
 ### Q1: Style
 
@@ -73,6 +73,39 @@ options:
   - label: No, skip prompt review
     description: Proceed directly to image generation
 ```
+
+### Q6: Output Formats
+
+**Multi-select** — the user can choose any combination. Filter options by the chosen preset's `Compatible Outputs` block in `references/styles/<preset>.md`:
+
+- Show options rated `excellent`, `good`, or `degraded` for the chosen preset.
+- **Hide** options rated `unsupported`.
+- If only `png` remains after filtering, skip this question (no choice to make).
+
+```yaml
+header: Output
+question: Which output formats? (multi-select)
+multiSelect: true
+options:
+  - label: Image slides (Recommended)
+    description: AI-painted PNG per slide, packed into PPTX + PDF. Highest visual fidelity.
+  - label: Single-file HTML
+    description: Self-contained .html with selectable text. Available from v1.115. {warn_if_degraded:html}
+  - label: Editable PPTX
+    description: Real text boxes layered over AI background. Edit in PowerPoint/Keynote. Available from v1.116. {warn_if_degraded:pptx-editable}
+```
+
+Render `{warn_if_degraded:<format>}` as `(⚠ approximated for this style)` when the per-preset rating for that format is `degraded`; render nothing when `excellent` or `good`.
+
+The internal keys for the selected labels are:
+
+| Label | IR key |
+|-------|--------|
+| Image slides | `png` |
+| Single-file HTML | `html` |
+| Editable PPTX | `pptx-editable` |
+
+Store the resulting array as `meta.output_formats` in `slides.json`.
 
 ## Round 2 — Custom Dimensions
 

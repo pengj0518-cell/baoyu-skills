@@ -62,8 +62,10 @@ Respond in the user's language across questions, progress reports, error message
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/merge-to-pptx.ts` | Merge slides into PowerPoint |
-| `scripts/merge-to-pdf.ts` | Merge slides into PDF |
+| `scripts/outline-to-ir.ts` | Parse `outline.md` → `slides.json` (Slide IR) |
+| `scripts/ir-to-prompts.ts` | Render `slides.json` → `prompts/NN-slide-{slug}.md` |
+| `scripts/merge-to-pptx.ts` | Merge image slides into PowerPoint (`png` format) |
+| `scripts/merge-to-pdf.ts` | Merge image slides into PDF (`png` format) |
 
 ## Options
 
@@ -73,6 +75,7 @@ Respond in the user's language across questions, progress reports, error message
 | `--audience <type>` | beginners / intermediate / experts / executives / general |
 | `--lang <code>` | Output language (en, zh, ja, ...) |
 | `--slides <N>` | Target slide count (8-25 recommended, max 30) |
+| `--format <fmt>` | Output format; repeatable. `png` (default), `html` (Phase 3), `pptx-editable` (Phase 4) |
 | `--ref <files...>` | Reference images applied per slide (style / palette / composition / subject) |
 | `--outline-only` | Stop after outline |
 | `--prompts-only` | Stop after prompts (skip image generation) |
@@ -184,11 +187,15 @@ At generation time, verify files exist. If `usage: direct` and the backend accep
 slide-deck/{topic-slug}/
 ├── source-{slug}.{ext}
 ├── outline.md
+├── slides.json                  # Slide IR (see references/slide-ir-schema.md)
 ├── prompts/NN-slide-{slug}.md
-├── NN-slide-{slug}.png
-├── {topic-slug}.pptx
-└── {topic-slug}.pdf
+├── NN-slide-{slug}.png          # png format only
+├── {topic-slug}.pptx            # png format only (image-packed)
+├── {topic-slug}.pdf             # png format only
+└── {topic-slug}.html            # html format only (Phase 3)
 ```
+
+`slides.json` is generated automatically from `outline.md` at the end of Step 3 and re-read by every renderer. The HTML and editable-PPTX renderers ship in Phase 3 and Phase 4 respectively.
 
 **Slug**: 2-4 words, kebab-case, extracted from topic. "Introduction to Machine Learning" → `intro-machine-learning`.
 
@@ -201,12 +208,12 @@ Copy this checklist and check off items as you complete them:
 ```
 - [ ] Step 1: Setup & analyze
 - [ ] Step 2: Confirmation ⚠️ REQUIRED (Round 1; Round 2 only if "Custom dimensions")
-- [ ] Step 3: Generate outline
+- [ ] Step 3: Generate outline → slides.json (IR)
 - [ ] Step 4: Review outline (conditional)
-- [ ] Step 5: Generate prompts
+- [ ] Step 5: Generate prompts from IR
 - [ ] Step 6: Review prompts (conditional)
-- [ ] Step 7: Generate images
-- [ ] Step 8: Merge to PPTX/PDF
+- [ ] Step 7: Render per output_formats (png images / html / editable pptx)
+- [ ] Step 8: Merge / package per format
 - [ ] Step 9: Output summary
 ```
 
@@ -232,21 +239,39 @@ Save findings to `analysis.md`: topic, audience, signals, recommended style and 
 
 **Hard gate**: this step is mandatory per the [Confirmation Policy](#confirmation-policy) — Steps 3+ cannot start until the user confirms here (or explicitly opts out with "直接生成" / equivalent wording in the current request).
 
-**Round 1 (always)** — batch five questions in one `AskUserQuestion` call: style, audience, slide count, review-outline?, review-prompts?. Verbatim options in `references/confirmation.md`.
+**Round 1 (always)** — batch up to six questions in one `AskUserQuestion` call: style, audience, slide count, review-outline?, review-prompts?, **output_formats**. Verbatim options in `references/confirmation.md`.
+
+Q6 (output_formats) is conditional:
+
+1. Resolve the chosen preset's `Compatible Outputs` table from `references/styles/<preset>.md` (or the custom style's defaults).
+2. Drop options rated `unsupported` for that preset.
+3. If only `png` remains, **skip Q6** and assume `output_formats: ["png"]`.
+4. Otherwise show the multi-select with remaining options, pre-checking `preferred_output_formats` from EXTEND.md if present.
+5. Mark `degraded` options with `(⚠ approximated for this style)` in the option description.
 
 Summary displayed before the questions:
 - Content type + topic
 - Detected language
 - Recommended style (based on signals)
 - Recommended slide count (based on length)
+- Available output formats for the recommended style
 
-**Round 2 (only if "Custom dimensions" in Round 1)** — batch four questions: texture, mood, typography, density. Verbatim options in `references/confirmation.md`. The four answers replace the preset.
+**Round 2 (only if "Custom dimensions" in Round 1)** — batch four questions: texture, mood, typography, density. Verbatim options in `references/confirmation.md`. The four answers replace the preset; assume default compatibility ratings (`png: excellent`, `html: good`, `pptx-editable: good`) unless the user picks a `pixel` texture (then `pptx-editable: unsupported`).
 
-**After confirmation**: update `analysis.md` with final choices and store `skip_outline_review` / `skip_prompt_review` flags from Q4/Q5.
+**After confirmation**: update `analysis.md` with final choices including `output_formats`. Store `skip_outline_review` / `skip_prompt_review` flags from Q4/Q5.
 
-### Step 3: Generate Outline
+### Step 3: Generate Outline → IR
 
-Resolve style: preset → `references/styles/{preset}.md`; custom dimensions → combine files in `references/dimensions/`. Build `STYLE_INSTRUCTIONS` from the resolved style, apply confirmed audience + language + slide count, follow `references/outline-template.md`, and save as `outline.md`.
+**3.1 Outline.** Resolve style: preset → `references/styles/{preset}.md`; custom dimensions → combine files in `references/dimensions/`. Build `STYLE_INSTRUCTIONS` from the resolved style, apply confirmed audience + language + slide count, follow `references/outline-template.md`, and save as `outline.md` (backup rule applies).
+
+**3.2 IR.** Immediately after writing `outline.md`, run:
+
+```bash
+${BUN_X} {baseDir}/scripts/outline-to-ir.ts <slide-deck-dir> \
+  $(printf -- '--format %s ' "${output_formats[@]}")
+```
+
+This parses the outline and writes `slides.json` — the structured representation every renderer consumes. The script validates `meta.slide_count === slides.length`, unique slide numbers, and filename prefix consistency; it exits non-zero on failure. See `references/slide-ir-schema.md` for the contract.
 
 Stop here if `--outline-only`. Skip Step 4 if `skip_outline_review`.
 
@@ -254,16 +279,19 @@ Stop here if `--outline-only`. Skip Step 4 if `skip_outline_review`.
 
 Display a slide-by-slide table (`# | Title | Type | Layout`) along with total count and resolved style. Ask: proceed / edit outline first / regenerate — verbatim in `references/confirmation.md`.
 
-On "Edit outline first", tell the user to edit `outline.md` and ask again when ready. On "Regenerate outline", return to Step 3.
+On "Edit outline first", tell the user to edit `outline.md` and ask again when ready — then re-run `outline-to-ir.ts` to refresh `slides.json`. On "Regenerate outline", return to Step 3.
 
-### Step 5: Generate Prompts
+### Step 5: Generate Prompts from IR
 
-For each slide in outline:
-1. Read `references/base-prompt.md`
-2. Extract `STYLE_INSTRUCTIONS` from the outline (don't re-read the style file)
-3. Add the slide's content
-4. If a `Layout:` is specified, include guidance from `references/layouts.md`
-5. Save to `prompts/NN-slide-{slug}.md` (backup rule applies)
+Run:
+
+```bash
+${BUN_X} {baseDir}/scripts/ir-to-prompts.ts <slide-deck-dir>
+```
+
+This reads `slides.json`, embeds `references/base-prompt.md` + `style_instructions` + per-slide content + layout hint, and writes `prompts/NN-slide-{slug}.md` (backup rule applies). Each prompt file carries YAML frontmatter (`n`, `slug`, `type`, `layout`, `filename`, `output_formats`) so individual files remain reproducible.
+
+**Manual edits**: if the user wants to tweak a single slide between Step 4 and Step 5, edit `slides.json` directly and re-run `ir-to-prompts.ts --only N` for the affected slide.
 
 Stop here if `--prompts-only`. Skip Step 6 if `skip_prompt_review`.
 
@@ -271,21 +299,41 @@ Stop here if `--prompts-only`. Skip Step 6 if `skip_prompt_review`.
 
 Display the prompts index (`# | Filename | Slide Title`) and ask: proceed / edit prompts first / regenerate — verbatim in `references/confirmation.md`. Branches mirror Step 4.
 
-### Step 7: Generate Images
+### Step 7: Render per Output Format
+
+Read `meta.output_formats` from `slides.json` and dispatch one branch per format. Branches are independent — failure of one does not block the others.
+
+**7a · `png` (shipped)**
 
 1. Resolve the image backend via the Image Generation Tools rule at the top — ask once if multiple are installed.
 2. Confirm every `prompts/NN-slide-{slug}.md` exists (hard requirement; prompt files are the reproducibility record regardless of backend).
 3. Session ID: `slides-{topic-slug}-{timestamp}` — pass to the backend only if it supports sessions.
 4. For each slide: generate sequentially, reusing the session ID. Backup rule applies to PNG files. Report progress as `Generated X/N`. Auto-retry once on failure before reporting an error.
 
-`--regenerate N` jumps to this step for the named slides only. `--images-only` starts here with existing prompts.
+`--regenerate N` jumps to this branch for the named slides only. `--images-only` starts here with existing prompts.
 
-### Step 8: Merge
+**7b · `html` (Phase 3 — not yet implemented)**
+
+When `html` is in `meta.output_formats`, invoke `scripts/render-html.ts` (ships in Phase 3). Until then, print a notice: `🚧 html renderer ships in Phase 3 — skipping`. Other formats still run.
+
+**7c · `pptx-editable` (Phase 4 — not yet implemented)**
+
+When `pptx-editable` is in `meta.output_formats`, invoke `scripts/render-pptx-editable.ts` (ships in Phase 4). Until then, print a notice: `🚧 editable PPTX renderer ships in Phase 4 — skipping`. Other formats still run.
+
+### Step 8: Merge / Package per Format
+
+For each format in `meta.output_formats` that has shipped:
+
+**`png` →** pack the rendered PNGs into PowerPoint and PDF:
 
 ```bash
 ${BUN_X} {baseDir}/scripts/merge-to-pptx.ts <slide-deck-dir>
 ${BUN_X} {baseDir}/scripts/merge-to-pdf.ts <slide-deck-dir>
 ```
+
+**`html` →** `scripts/render-html.ts` writes the single-file `.html` directly; no merge step.
+
+**`pptx-editable` →** `scripts/render-pptx-editable.ts` writes the `.pptx` directly; no merge step.
 
 ### Step 9: Summary
 
@@ -295,25 +343,41 @@ Topic: [topic]
 Style: [preset or "custom: texture+mood+typography+density"]
 Location: [directory]
 Slides: N
+Formats: [comma-separated list from meta.output_formats]
 
+IR: slides.json
+Outline: outline.md
+
+[For each format produced, list its artefacts. Example:]
+
+png:
 - 01-slide-cover.png
 - ...
 - NN-slide-back-cover.png
+- {topic-slug}.pptx
+- {topic-slug}.pdf
 
-Outline: outline.md
-PPTX: {topic-slug}.pptx
-PDF: {topic-slug}.pdf
+html:  (when shipped)
+- {topic-slug}.html
+
+pptx-editable:  (when shipped)
+- {topic-slug}-editable.pptx
 ```
+
+If any format was skipped due to "🚧 not yet implemented", call it out in the summary.
 
 ## Slide Modification
 
+With the IR in place, `slides.json` is the structured source of truth and `outline.md` is the human-readable source. Edit either, regenerate the other side, then re-render.
+
 | Action | How |
 |--------|-----|
-| Edit | Update `prompts/NN-slide-{slug}.md` **first**, then `--regenerate N` |
-| Add | Create new prompt at position, generate image, renumber subsequent `NN` (slugs unchanged), update `outline.md`, re-merge |
-| Delete | Remove PNG + prompt, renumber subsequent, update `outline.md`, re-merge |
+| Edit one slide | Edit `slides.json` (the slide's IR entry) → `ir-to-prompts.ts --only N` → `--regenerate N` for png, or rerun HTML/PPTX renderer |
+| Edit prompt text only | Update `prompts/NN-slide-{slug}.md` directly, then `--regenerate N` (png-only path; the change is lost the next time IR is re-rendered) |
+| Add | Edit `outline.md` to insert the new slide → re-run `outline-to-ir.ts` → re-run `ir-to-prompts.ts` → render only the new + renumbered slides |
+| Delete | Remove the slide from `outline.md` → re-run `outline-to-ir.ts` → re-run `ir-to-prompts.ts` → re-merge |
 
-Always update the prompt file before regenerating the image — this keeps the prompts directory as the source of truth and makes changes reproducible. Only `NN` changes on renumber; slugs stay stable so references remain valid.
+Only `NN` changes on renumber; slugs stay stable so references remain valid.
 
 See `references/modification-guide.md` for full details.
 
@@ -321,6 +385,9 @@ See `references/modification-guide.md` for full details.
 
 | File | Content |
 |------|---------|
+| `references/slide-ir-schema.md` | `slides.json` contract — shared between renderers |
+| `references/render-targets.md` | Capabilities and limits of `png` / `html` / `pptx-editable` |
+| `references/style-compatibility.md` | Central style × format matrix (per-preset rating is canonical) |
 | `references/confirmation.md` | Verbatim AskUserQuestion option copy for every confirmation |
 | `references/analysis-framework.md` | Content analysis framework |
 | `references/outline-template.md` | Outline structure |
@@ -329,7 +396,7 @@ See `references/modification-guide.md` for full details.
 | `references/design-guidelines.md` | Audience, typography, color selection |
 | `references/content-rules.md` | Content guidelines |
 | `references/modification-guide.md` | Edit/add/delete workflows |
-| `references/styles/<preset>.md` | Per-preset specifications |
+| `references/styles/<preset>.md` | Per-preset specifications (incl. `Compatible Outputs` matrix) |
 | `references/dimensions/*.md` | Per-dimension specifications |
 | `references/config/preferences-schema.md` | EXTEND.md schema |
 
@@ -350,3 +417,4 @@ EXTEND.md lives at the first matching path listed in Step 1.1. Two ways to chang
   - `preferred_image_backend: baoyu-imagine` — pin to the baoyu-imagine skill.
   - `preferred_image_backend: ask` — confirm backend every run.
   - `preferred_style: blueprint`, `preferred_audience: experts`, `language: zh`.
+  - `preferred_output_formats: [png, html]` — produce HTML alongside PNG by default (filtered against the chosen style's compatibility).

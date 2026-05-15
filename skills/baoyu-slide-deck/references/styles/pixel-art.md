@@ -2,6 +2,14 @@
 
 Retro 8-bit pixel art aesthetic with nostalgic gaming visual style
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | degraded |
+| pptx-editable | unsupported |
+
 ## Design Aesthetic
 
 Pixelated retro aesthetic reminiscent of classic 8-bit and 16-bit era games. Chunky pixels, limited color palettes, and nostalgic gaming references. Simple geometric shapes rendered in blocky pixel form. Fun, playful, and immediately recognizable retro tech aesthetic.

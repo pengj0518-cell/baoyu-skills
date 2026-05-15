@@ -2,6 +2,14 @@
 
 Ultra-clean keynote style with maximum whitespace and zen-like simplicity
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | excellent |
+| pptx-editable | excellent |
+
 ## Design Aesthetic
 
 Maximum whitespace with minimal elements. Zen-like simplicity where every element earns its place. Premium, refined aesthetic suitable for executive audiences. Less is more - remove until nothing more can be taken away.

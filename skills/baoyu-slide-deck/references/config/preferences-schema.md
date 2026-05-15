@@ -13,6 +13,8 @@ audience: general             # beginners | intermediate | experts | executives 
 language: auto                # auto | en | zh | ja | etc.
 review: true                  # true = review outline before generation
 preferred_image_backend: auto # auto | ask | <backend-id>
+preferred_output_formats:     # png | html | pptx-editable (multi-select); default: [png]
+  - png
 
 ## Custom Dimensions (only when style: custom)
 dimensions:
@@ -42,6 +44,7 @@ custom_styles:
 | `language` | string | `auto` | Output language (auto = detect from input) |
 | `review` | boolean | `true` | Show outline review before generation |
 | `preferred_image_backend` | string | `auto` | Image backend selection. `auto` = prefer runtime-native tool, fall back to the only installed backend, ask if multiple non-native are present. `ask` = always confirm on every run. `<backend-id>` (e.g., `codex-imagegen`, `baoyu-imagine`, `image_generate`) = pin this backend when available; fall back to `auto` when it isn't. Absent = `auto`. Resolution logic is documented in `SKILL.md`'s `## Image Generation Tools` section. |
+| `preferred_output_formats` | string[] | `[png]` | Render targets to produce. Subset of `["png", "html", "pptx-editable"]`. When set, Step 2 pre-selects these in Q6; the user can still change them. Formats rated `unsupported` for the chosen style are silently dropped. See `references/render-targets.md` and `references/style-compatibility.md`. |
 
 ### Custom Dimensions
 
@@ -82,6 +85,14 @@ style: sketch-notes
 
 ```yaml
 review: false
+```
+
+### Always produce HTML alongside PNG
+
+```yaml
+preferred_output_formats:
+  - png
+  - html
 ```
 
 ### Custom default dimensions

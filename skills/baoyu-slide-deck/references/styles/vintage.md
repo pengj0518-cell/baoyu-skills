@@ -2,6 +2,14 @@
 
 Vintage aged-paper aesthetic for historical and expedition-style presentations
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | degraded |
+
 ## Design Aesthetic
 
 Nostalgic vintage aesthetic with aged paper textures and historical document styling. Think explorer's journals, antique maps, and museum exhibits. Rich warm tones with weathered textures. Evokes discovery, heritage, and timeless knowledge.

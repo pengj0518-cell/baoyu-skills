@@ -2,6 +2,14 @@
 
 Hand-drawn educational infographic with macaron pastel color blocks on warm cream paper
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | degraded |
+
 ## Design Aesthetic
 
 Hand-drawn educational infographic feel with slight wobble on all lines and shapes, like a high-quality presentation visual summary. Warm cream paper background with macaron pastel color blocks creating distinct information zones. Simple cartoon characters and doodle decorations bring concepts to life while maintaining clean composition and generous white space.

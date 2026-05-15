@@ -2,6 +2,8 @@
 
 Standard structure for slide deck outlines with style instructions.
 
+The outline is the **human-readable source** for the deck. After Step 4 (outline review), `scripts/outline-to-ir.ts` parses this file into `slides.json` — the structured IR consumed by all renderers (PNG / HTML / PPTX-editable). See `references/slide-ir-schema.md` for the IR contract. **Do not edit `slides.json` and `outline.md` simultaneously** — pick one as source and regenerate the other.
+
 ## Outline Format
 
 ```markdown

@@ -2,6 +2,14 @@
 
 SaaS dashboard aesthetic with clean data focus and productivity tool styling
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | excellent |
+| pptx-editable | excellent |
+
 ## Design Aesthetic
 
 Clean, functional SaaS interface aesthetic. Dashboard-inspired layouts with clear data hierarchy. Notion, Linear, and modern productivity tool styling. Information-dense but organized. Professional and trustworthy.

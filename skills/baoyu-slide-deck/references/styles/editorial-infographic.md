@@ -2,6 +2,14 @@
 
 Modern magazine-style editorial infographic with clear visual storytelling
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | good |
+| pptx-editable | good |
+
 ## Design Aesthetic
 
 High-quality magazine explainer aesthetic. Clear visual storytelling that transforms complex information into digestible narratives. Clean illustrations, structured layouts, and professional typography. Think Wired, The Verge, or high-end science publications.

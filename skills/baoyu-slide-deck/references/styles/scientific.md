@@ -2,6 +2,14 @@
 
 Educational scientific illustration style for pathways, processes, and technical diagrams
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | excellent |
+| pptx-editable | excellent |
+
 ## Design Aesthetic
 
 Academic scientific illustration aesthetic for biological pathways, chemical processes, and technical systems. Clean, precise diagrams with proper labeling and clear visual flow. Educational clarity with professional polish. Think textbook quality illustrations and academic journal figures.

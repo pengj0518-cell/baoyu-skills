@@ -2,6 +2,14 @@
 
 High-impact magazine editorial style with bold visual expression
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | excellent |
+| pptx-editable | good |
+
 ## Design Aesthetic
 
 Strong visual impact at magazine cover level. Bold typography and dramatic contrast. Full-bleed imagery and large color blocks create commanding presence. Every slide feels like a premium publication cover.

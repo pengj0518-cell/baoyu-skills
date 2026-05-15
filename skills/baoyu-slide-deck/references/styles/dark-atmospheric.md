@@ -2,6 +2,14 @@
 
 Dark moody aesthetic with deep colors and glowing accent elements
 
+## Compatible Outputs
+
+| Format | Rating |
+|--------|--------|
+| png | excellent |
+| html | excellent |
+| pptx-editable | good |
+
 ## Design Aesthetic
 
 Cinematic dark mode aesthetic with atmospheric depth. Deep purples, blacks, and rich shadows with glowing accents creating dramatic visual contrast. Mysterious, sophisticated, and visually striking. Perfect for evening events, creative industries, and premium brand presentations.
