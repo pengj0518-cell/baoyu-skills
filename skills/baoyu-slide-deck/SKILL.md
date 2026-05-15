@@ -294,6 +294,8 @@ ${BUN_X} {baseDir}/scripts/ir-to-prompts.ts <slide-deck-dir>
 
 This reads `slides.json`, embeds `references/base-prompt.md` + `style_instructions` + per-slide content + layout hint, and writes `prompts/NN-slide-{slug}.md` (backup rule applies). Each prompt file carries YAML frontmatter (`n`, `slug`, `type`, `layout`, `filename`, `output_formats`) so individual files remain reproducible.
 
+**Slide types and per-slide override**: outlines can tag slides as `cover`, `content`, `quote`, `data`, `code`, `diagram`, `image`, or `closing`, plus optional `**Render**: image|html|pptx` to force a single slide into a specific format. Templates for each type live in `references/outline-template.md`; the parser populates the corresponding fields in `slides.json` and the renderers dispatch off them (data → native chart, code → mono text box, etc.). See `references/analysis-framework.md` § Type Selection for when to use each type.
+
 **Manual edits**: if the user wants to tweak a single slide between Step 4 and Step 5, edit `slides.json` directly and re-run `ir-to-prompts.ts --only N` for the affected slide.
 
 Stop here if `--prompts-only`. Skip Step 6 if `skip_prompt_review`.

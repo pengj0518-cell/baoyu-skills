@@ -187,6 +187,127 @@ Layout: [optional: layout name from gallery]
 [Composition, hierarchy, spatial arrangement]
 ```
 
+## Quote Slide Template
+
+```markdown
+## Slide X of N
+
+**Type**: Quote
+**Filename**: {NN}-slide-{slug}.png
+
+// NARRATIVE GOAL
+[Why this quote earns a full slide]
+
+// QUOTE
+Text: [the quote, no surrounding quotation marks]
+Attribution: [Speaker name, optional title or context]
+
+// LAYOUT
+Layout: quote-callout
+```
+
+Title field is optional for `Quote` type — the quote text itself anchors the slide.
+
+## Data Slide Template
+
+```markdown
+## Slide X of N
+
+**Type**: Data
+**Filename**: {NN}-slide-{slug}.png
+
+// KEY CONTENT
+Headline: [chart caption / question the data answers]
+Sub-headline: [unit, period, sample size, etc.]
+
+// DATA
+Kind: bar | line | pie | table
+| col1 | col2 | col3 |
+|------|------|------|
+| val  | val  | val  |
+| val  | val  | val  |
+```
+
+Optional fields inside the DATA block:
+- `XKey: <column-name>` overrides which column maps to the X axis (default: first column).
+- `YKey: <column-name>` overrides which column maps to the Y axis (default: first numeric column after the X axis).
+
+The HTML renderer draws an inline SVG chart from the table; the editable-PPTX renderer emits a native PowerPoint chart object recipients can edit; the PNG path paints an AI approximation.
+
+## Code Slide Template
+
+```markdown
+## Slide X of N
+
+**Type**: Code
+**Filename**: {NN}-slide-{slug}.png
+
+// KEY CONTENT
+Headline: [what the snippet illustrates]
+
+// CODE
+Lang: python | typescript | rust | bash | ...
+
+def cosine(a, b):
+    return dot(a, b) / (norm(a) * norm(b))
+```
+
+Source can be raw (after a blank line below `Lang:`) or fenced (```` ```python … ``` ````). The HTML renderer wraps it in `<pre><code>`; the PPTX renderer puts it in a monospace text box. Keep snippets short — slides are not editors.
+
+## Diagram Slide Template
+
+```markdown
+## Slide X of N
+
+**Type**: Diagram
+**Filename**: {NN}-slide-{slug}.png
+
+// KEY CONTENT
+Headline: [what relationship the diagram shows]
+
+// DIAGRAM
+Kind: mermaid | plantuml | ascii
+
+graph LR
+  Client --> CDN
+  CDN --> EdgeModel
+```
+
+Current renderers display the spec verbatim in a monospace box. A future enhancement will pipe `mermaid` and `plantuml` specs to `baoyu-diagram` for inline SVG rendering; the spec format is forward-compatible so existing decks lift automatically.
+
+## Image Slide Template
+
+```markdown
+## Slide X of N
+
+**Type**: Image
+**Filename**: {NN}-slide-{slug}.png
+
+// VISUAL
+[Description of the image — used by AI for PNG generation, and as alt text]
+
+// LAYOUT
+Layout: image-caption
+```
+
+For `Image` type, title is optional. If the slide already has a generated `NN-slide-{slug}.png` and the deck includes formats other than `png`, the renderer inlines that PNG full-bleed.
+
+## Per-Slide Render Override
+
+Any slide can opt out of the deck-level `output_formats` for that slide alone:
+
+```markdown
+## Slide X of N
+
+**Type**: Content
+**Render**: image
+**Filename**: {NN}-slide-{slug}.png
+
+...
+```
+
+Values: `image` / `html` / `pptx`. Use when one slide needs a different fidelity than the rest of the deck (e.g., a hero painting in an otherwise text-based HTML deck).
+
 ## Back Cover Slide Template
 
 ```markdown

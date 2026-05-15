@@ -65,6 +65,37 @@ Rate each piece of content:
 - **Should Visualize**: Supporting evidence, secondary points
 - **Text Only**: Simple statements, transitions, minor details
 
+### Type Selection per Slide
+
+Each slide carries a `**Type**` tag that drives renderer dispatch (`references/slide-ir-schema.md`). Tag deliberately by matching content signals — the type changes how HTML and editable-PPTX render the slide; the PNG path still works for any type.
+
+| Signal in source | Recommended `Type` | Block to include |
+|------------------|--------------------|------------------|
+| Quotation marks around a sentence + attribution | `Quote` | `// QUOTE` |
+| Table of numbers, comparison metrics, KPIs | `Data` | `// DATA` with markdown table |
+| Code snippet, command, configuration | `Code` | `// CODE` |
+| Mermaid / PlantUML spec, flowchart sketch | `Diagram` | `// DIAGRAM` |
+| Photo / illustration as the whole point | `Image` | (image-only, no body) |
+| Title page / agenda / section break | `Cover` | (no special block) |
+| Final call-to-action / wrap | `Back Cover` | (no special block) |
+| Anything else | `Content` | `// KEY CONTENT` with bullets |
+
+**Why this matters per format**:
+
+- `code` slides in HTML render real `<pre><code>` blocks; in PPTX render a monospace text box. Both let users copy the code; the PNG path would otherwise show an AI-painted approximation with typos.
+- `data` slides in HTML render an SVG chart from real numbers; in PPTX render a native chart that the recipient can edit. The PNG path would paint an inaccurate approximation.
+- `diagram` slides render the spec verbatim in a monospace box for now (Phase 6 will swap to `baoyu-diagram` SVG). Tag the type now so the future upgrade lifts the slide automatically.
+- `quote` slides in HTML render a `<blockquote>` with attribution; in PPTX render a left-accent rectangle next to the quote text. PNG path paints a quote card.
+
+### Per-Slide Render Override
+
+For unusual cases, add a `**Render**: image | html | pptx` field to force one slide into a specific renderer regardless of the deck-level `output_formats`. Examples:
+
+- Whole deck is HTML, but slide 4 is a hero illustration → `**Render**: image` (AI-painted PNG inlined full-bleed).
+- Whole deck is PNG, but slide 8 is a code listing → `**Render**: html` (HTML fragment rasterised at merge time so the code is crisp).
+
+If `Render` is absent the slide is produced in every format listed in `meta.output_formats`.
+
 ## 4. Presentation Flow
 
 Structure for impact and retention.
