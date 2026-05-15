@@ -1,0 +1,32 @@
+{
+  "fonts": {
+    "heading": "Georgia",
+    "body": "Calibri",
+    "mono": "Consolas",
+    "headingZh": "Microsoft YaHei",
+    "bodyZh": "Microsoft YaHei"
+  },
+  "colors": {
+    "bg": "FFF8EB",
+    "textPrimary": "1A1A1A",
+    "textHeading": "000000",
+    "textSecondary": "595959",
+    "accent": "DC2626",
+    "accentOn": "FFF8EB",
+    "border": "E8E1D0"
+  },
+  "sizes": {
+    "titleCover": 80,
+    "titleContent": 44,
+    "titleKeyStat": 150,
+    "subtitle": 22,
+    "body": 18,
+    "quote": 36,
+    "code": 14,
+    "bulletGap": 8
+  },
+  "options": {
+    "titleBold": true,
+    "bulletShape": "dot"
+  }
+}

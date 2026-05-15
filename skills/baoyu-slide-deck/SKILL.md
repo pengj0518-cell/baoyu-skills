@@ -65,6 +65,7 @@ Respond in the user's language across questions, progress reports, error message
 | `scripts/outline-to-ir.ts` | Parse `outline.md` → `slides.json` (Slide IR) |
 | `scripts/ir-to-prompts.ts` | Render `slides.json` → `prompts/NN-slide-{slug}.md` |
 | `scripts/render-html.ts` | Render `slides.json` → single-file `{topic-slug}.html` (`html` format) |
+| `scripts/render-pptx-editable.ts` | Render `slides.json` → editable `{topic-slug}-editable.pptx` (`pptx-editable` format) |
 | `scripts/merge-to-pptx.ts` | Merge image slides into PowerPoint (`png` format) |
 | `scripts/merge-to-pdf.ts` | Merge image slides into PDF (`png` format) |
 
@@ -76,7 +77,7 @@ Respond in the user's language across questions, progress reports, error message
 | `--audience <type>` | beginners / intermediate / experts / executives / general |
 | `--lang <code>` | Output language (en, zh, ja, ...) |
 | `--slides <N>` | Target slide count (8-25 recommended, max 30) |
-| `--format <fmt>` | Output format; repeatable. `png` (default), `html`, `pptx-editable` (Phase 4) |
+| `--format <fmt>` | Output format; repeatable. `png` (default), `html`, `pptx-editable` |
 | `--ref <files...>` | Reference images applied per slide (style / palette / composition / subject) |
 | `--outline-only` | Stop after outline |
 | `--prompts-only` | Stop after prompts (skip image generation) |
@@ -193,10 +194,11 @@ slide-deck/{topic-slug}/
 ├── NN-slide-{slug}.png          # png format only
 ├── {topic-slug}.pptx            # png format only (image-packed)
 ├── {topic-slug}.pdf             # png format only
-└── {topic-slug}.html            # html format only
+├── {topic-slug}.html            # html format only
+└── {topic-slug}-editable.pptx   # pptx-editable format only
 ```
 
-`slides.json` is generated automatically from `outline.md` at the end of Step 3 and re-read by every renderer. The editable-PPTX renderer ships in Phase 4.
+`slides.json` is generated automatically from `outline.md` at the end of Step 3 and re-read by every renderer. All three output formats can be produced from the same IR in a single run.
 
 **Slug**: 2-4 words, kebab-case, extracted from topic. "Introduction to Machine Learning" → `intro-machine-learning`.
 
@@ -325,9 +327,17 @@ The renderer reads `slides.json`, inlines `references/html-styles/base.css` + `t
 
 If a slide has `background_image` set in `slides.json`, the renderer inlines that file as a base64 data URI. To embed an AI-generated PNG as the slide background, set `background_image: "NN-slide-{slug}.png"` in the slide's IR entry before running this step. For per-slide `render_override: "image"`, the PNG is used full-bleed instead of CSS rendering.
 
-**7c · `pptx-editable` (Phase 4 — not yet implemented)**
+**7c · `pptx-editable`**
 
-When `pptx-editable` is in `meta.output_formats`, invoke `scripts/render-pptx-editable.ts` (ships in Phase 4). Until then, print a notice: `🚧 editable PPTX renderer ships in Phase 4 — skipping`. Other formats still run.
+When `pptx-editable` is in `meta.output_formats`:
+
+```bash
+${BUN_X} {baseDir}/scripts/render-pptx-editable.ts <slide-deck-dir>
+```
+
+The renderer reads `slides.json` and emits `{topic-slug}-editable.pptx` with **real editable content**: each slide has true text boxes, shapes, and (for `data` type) native PowerPoint charts — no rasterised images. The theme (fonts, colors, type sizes) comes from `references/pptx-themes/<preset>.json` falling back to `_default.json`.
+
+Fonts are not embedded; the theme declares system-universal families (`Calibri`, `Cambria`, `Helvetica Neue`, `Microsoft YaHei` / `PingFang SC` for zh) so the deck opens cleanly in PowerPoint / Keynote / Google Slides. If a slide has `background_image` set, the renderer overlays text boxes on top of it (hybrid mode — AI background + editable foreground). If `render_override: "image"` is set, the slide becomes a full-bleed image.
 
 ### Step 8: Merge / Package per Format
 
@@ -342,7 +352,7 @@ ${BUN_X} {baseDir}/scripts/merge-to-pdf.ts <slide-deck-dir>
 
 **`html` →** `scripts/render-html.ts` writes the single-file `.html` directly; no merge step. To export PDF from HTML with sharper text than image-based PDF, open the file in Chrome and "Print → Save as PDF" — the print stylesheet built into `base.css` lays each `<section>` on its own page.
 
-**`pptx-editable` →** `scripts/render-pptx-editable.ts` writes the `.pptx` directly; no merge step.
+**`pptx-editable` →** `scripts/render-pptx-editable.ts` writes the `.pptx` directly; no merge step. The output is named `{topic-slug}-editable.pptx` so it lives alongside the image-packed `{topic-slug}.pptx` from the `png` branch without overwriting.
 
 ### Step 9: Summary
 
@@ -366,14 +376,13 @@ png:
 - {topic-slug}.pptx
 - {topic-slug}.pdf
 
-html:  (when shipped)
+html:
 - {topic-slug}.html
 
-pptx-editable:  (when shipped)
+pptx-editable:
 - {topic-slug}-editable.pptx
 ```
 
-If any format was skipped due to "🚧 not yet implemented", call it out in the summary.
 
 ## Slide Modification
 
@@ -410,6 +419,8 @@ See `references/modification-guide.md` for full details.
 | `references/html-styles/base.css` | Universal HTML layout, nav, keyboard, ToC |
 | `references/html-styles/tokens/<preset>.css` | Per-preset HTML CSS variables (font / colour / spacing) |
 | `references/html-styles/tokens/_default.css` | Fallback when no per-preset CSS exists |
+| `references/pptx-themes/<preset>.json` | Per-preset PPTX theme (fonts, colors, type sizes) |
+| `references/pptx-themes/_default.json` | Fallback when no per-preset PPTX theme exists |
 | `references/config/preferences-schema.md` | EXTEND.md schema |
 
 ## Notes
